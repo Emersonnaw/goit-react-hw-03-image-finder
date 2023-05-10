@@ -1,44 +1,41 @@
 // , ErrorMessage
-import { Formik, Form } from 'formik';
-import {string} from 'yup';
+import { Formik, Field, Form} from 'formik';
+// import { string } from 'yup';
+// import { Header, FormCastom, Button, Span, } from './Searchbar.styled';
 // import PropTypes from 'prop-types';
 
-let schema = {
-    searchQuery: string().min(2).max(15)
-};
-const initialValue = {
-    searchQuery: '',
+// let schema = {
+//     searchQuery: string().min(2).max(15)
+// };
+let initialValue = {
+    search:''
 };
 
 export const Searchbar = () => {
     
-     const handleSubmit = (values, { resetForm }) => {
-    // onFormData(values);
-         console.log(values);zcx
-    resetForm();
+    const handleSubmit = (values, { resetForm }) => {
+        // onFormData(values);
+        console.log(values);
+        resetForm();
     }
     
     return (
-        <header class="searchbar">
-
-            <Formik initialValue={initialValue} validationSchema={schema} onSubmit={handleSubmit}>
-                <Form class="form">
-                    <button type="submit" class="button">
-                    <span class="button-label">Search</span>
+       <header > 
+            <Formik initialValues={initialValue} onSubmit={handleSubmit}>
+                <Form autoComplete="off">
+                    <button type="submit" >
+                        <span>Search</span>
                     </button>
 
-                    <input
-                    // class="input"
-                    type="text"
-                    autoComplete="off"
-                    autoFocus
-                    placeholder="Search images and photos"
+                    <Field
+                        
+                        type="text"
+                        name="searchQuery"
+                     
                     />
                 </Form>
             </Formik>
- 
-</header>
-
-
+        </header>
+        
     );
-}
+};

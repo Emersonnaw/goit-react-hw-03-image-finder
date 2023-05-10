@@ -8,12 +8,12 @@ export class App extends Component  {
   showModal: true,
   };
 
-  toggleModal = () => {
-    this.setState(({ showModal }) => ({
-      showModal: !showModal,
-    })); 
+  // toggleModal = () => {
+  //   this.setState(({ showModal }) => ({
+  //     showModal: !showModal,
+  //   })); 
    
-  };
+  // };
 
 
 
