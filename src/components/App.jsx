@@ -5,16 +5,20 @@ import { Searchbar } from './Searchbar';
 export class App extends Component  {
 
   state = {
-  showModal: true,
+    showModal: true,
+    searchQuery:'',
   };
 
-  // toggleModal = () => {
-  //   this.setState(({ showModal }) => ({
-  //     showModal: !showModal,
-  //   })); 
-   
-  // };
+  toggleModal = () => {
+    this.setState(({ showModal }) => ({
+      showModal: !showModal,
+    })); 
+  };
 
+  onFormData = (value) => {
+    this.setState({ searchQuery: value });
+    
+  }
 
 
 
@@ -26,7 +30,7 @@ export class App extends Component  {
        
       <div>
         
-      <Searchbar />
+      <Searchbar onFormData ={this.onFormData} />
 
       {/* <Vortex
   visible={true}

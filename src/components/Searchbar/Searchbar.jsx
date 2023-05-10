@@ -1,7 +1,7 @@
 // , ErrorMessage
-import { Formik, Field, Form} from 'formik';
+import { Formik} from 'formik';
 // import { string } from 'yup';
-// import { Header, FormCastom, Button, Span, } from './Searchbar.styled';
+import { Header, FormCastom, Button, Span, FieldCastom} from './Searchbar.styled';
 // import PropTypes from 'prop-types';
 
 // let schema = {
@@ -11,31 +11,33 @@ let initialValue = {
     search:''
 };
 
-export const Searchbar = () => {
+export const Searchbar = ({onFormData}) => {
     
     const handleSubmit = (values, { resetForm }) => {
-        // onFormData(values);
+         onFormData(values);
         console.log(values);
         resetForm();
     }
     
     return (
-       <header > 
+       <Header > 
             <Formik initialValues={initialValue} onSubmit={handleSubmit}>
-                <Form autoComplete="off">
-                    <button type="submit" >
-                        <span>Search</span>
-                    </button>
+                <FormCastom autoComplete="off">
+                    <Button type="submit" >
+                        <Span>Search</Span>
+                    </Button>
 
-                    <Field
-                        
+                    <FieldCastom
+                       
+                        autoFocus
+                        placeholder="Search images and photos"
                         type="text"
-                        name="searchQuery"
+                        name="search"
                      
                     />
-                </Form>
+                </FormCastom>
             </Formik>
-        </header>
+        </Header>
         
     );
 };
