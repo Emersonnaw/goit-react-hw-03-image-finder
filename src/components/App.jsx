@@ -1,50 +1,29 @@
 import React, { Component } from 'react';
+import {AppDiv} from './App.styled'
 import { Searchbar } from './Searchbar';
-// import { Modal } from './Modal';
-// import { Vortex } from  'react-loader-spinner'
+import { ImageGallery } from './ImageGallery';
+
 export class App extends Component  {
 
   state = {
-    showModal: true,
-    searchQuery:'',
+    searchQuery:''
   };
 
-  toggleModal = () => {
-    this.setState(({ showModal }) => ({
-      showModal: !showModal,
-    })); 
-  };
+  
 
   onFormData = (value) => {
     this.setState({ searchQuery: value });
-    
   }
-
-
-
-  render() {
-
-    // const { showModal } = this.state;
   
+  render() {
+    const { searchQuery } = this.state;
     return (
        
-      <div>
-        
-      <Searchbar onFormData ={this.onFormData} />
-
-      {/* <Vortex
-  visible={true}
-  height="80"
-  width="80"
-  ariaLabel="vortex-loading"
-  wrapperStyle={{}}
-  wrapperClass="vortex-wrapper"
-  colors={['red', 'green', 'blue', 'yellow', 'orange', 'purple']}
-/> */}
-
-     {/* <button type="button" onClick={this.toggleModal}>Open</button>
-        {showModal && <Modal onClose={this.toggleModal} />} */}
-    </div>
+      <AppDiv>
+        <Searchbar onFormData={this.onFormData}/>  
+        <ImageGallery searchQuery={searchQuery} />
+      
+    </AppDiv>
       
   );
 }
