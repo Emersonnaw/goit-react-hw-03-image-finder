@@ -1,54 +1,74 @@
 import React, { Component } from 'react';
-import { Ul } from './ImageGallery.styled';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { H1, Ul } from './ImageGallery.styled';
 import { ImageGalleryItem } from 'components/ImageGalleryItem';
 import {PixabayApi} from '../Services/PixabayApi';
 import { Loader } from 'components/Loader';
 import { Button } from 'components/Button';
+import PropTypes from 'prop-types';
+
+
 export  class ImageGallery extends Component {
     state = {
         searchSet: null,
+        renderList:[],
         error: null,
         page: 1,
-        status: 'idle'
-
+        status: 'idle',
+       
     }
-
-    componentDidUpdate(prevProps, prevState) {
+    
+   async componentDidUpdate(prevProps, prevState) {
         const prevName = prevProps.searchQuery.search;
         const nextName = this.props.searchQuery.search;
-        const { page } = this.state;
-        
-        if ( prevName !== nextName ) {
-            this.setState({status:'pending', searchSet: null});
-            PixabayApi(nextName, page)
-                .then(resp => {
-                    if (resp.ok) {
-                        return resp.json();
-                    }
-                    return Promise.reject(
-                        new Error(`Нема запроса з ${nextName}`),
-                    );
-                
-                })
-                .then(search => {
-                    this.setState({ status: 'resolved', searchSet: search.hits })
-                })
-                .catch(error => this.setState({ status: 'rejected', error }));
-        }  
+        const prevPage = prevState.page;
+        const nextPage = this.state.page;
+       let reciveSetPIcture = null;
+       
+       
+       
+       if (prevName !== nextName || prevPage !== nextPage) {
+           try {
+            this.setState({status:'pending'});
+             reciveSetPIcture = await PixabayApi(nextName, nextPage);
+                if (reciveSetPIcture.hits.length === 0) {
+                    toast.error(`there is no  query with  "${nextName}"`, {
+                    position: "top-right",
+                    autoClose: 2000,
+                    theme: "colored",
+                    });
+                     this.setState({ status: 'reject', searchSet: [] }); 
+                     return;
+                 } 
+                 this.setState({ status: 'resolved', searchSet: reciveSetPIcture.hits }) 
+              this.setState(prevState => ({renderList:[...prevState.renderList, ...reciveSetPIcture.hits]}));
+      
+            } catch(error) {
+                    toast.error(`"${error}" Something were wrong `, {
+                    position: "top-right",
+                    autoClose: 3000,
+                    theme: "colored",
+                    });
+            }
+       }  
+       
+       if (prevName !== nextName && nextPage !== 1) {
+           this.setState({ renderList: [], page: 1 });
+       }
         }
 
     onLoadMore = () => {
-        this.setState(prevState => ({ page: prevState.page + 1,  }));
-        
+        this.setState(prevState => ({ page: prevState.page + 1  }));
+     
     };
     
-
-
+  
     render() {
-        const {searchSet,error, status} = this.state;
-    console.log(this.state.page);
+        const { error, status, renderList } = this.state;
+      
         if (status === 'idle') {
-            return <div><h1>Будь ласка введіть щось, що ви б хотіли переглянути</h1></div>;
+            return <div><H1>Please make a request and press enter </H1></div>;
         }
 
         if (status === 'pending') {
@@ -58,16 +78,17 @@ export  class ImageGallery extends Component {
         }
 
         if (status === 'rejected') {
-            return <h1> { error.message}</h1>;
+            return (<> <h1> {error.message}</h1>
+           
+            </> );
         }
-
 
         if (status === 'resolved') {
              return (
             <>
-                {searchSet &&
+                {renderList &&
                     <Ul> 
-                        {searchSet.map(({ id, webformatURL, tags, largeImageURL } ) => (
+                        {renderList.map(({ id, webformatURL, tags, largeImageURL } ) => (
                             <ImageGalleryItem
                                 key={id}
                                 webformatURL={webformatURL}
@@ -76,50 +97,14 @@ export  class ImageGallery extends Component {
                             />
                         ))} 
                     </Ul >
-                     }
-
-                     <Button onClick={this.onLoadMore } />
-             </>       
+                    }
+                <Button onClick={this.onLoadMore} />
+            </>       
             );
         }
     };
-};
+    };
 
-//  constructor() {
-//     this.search_query = '';
-//      this.page = 2; // increment number of page need to put om then(data)
-//      this.markup =''; 
-//   }
-
-//   get query() {
-//     return this.search_query;
-//   }
-
-//   set query(newQuery) {
-//     this.search_query = newQuery; 
-//   }
-
-//   resetPage(){
-//      this.page = 1;
-//   }
-  
-//   incrementPage(){
-//     this.page += 1;
-//   }
-  
-//   getReadyMarkup(){
-//     return this.markup;
-//    }
-
-//  async fetchImage() {
-//     const BASE_URL = 'https://pixabay.com/api/';
-//     const key = '34586692-ed7cb8a238ccde585a263c879';
-//     const searchTypePhoto = '&image_type=photo';
-//     const searchOrientation = '&orientation="horizontal"';
-//     const ageFilter = '&safesearch="true"';
-//     const perPage ='&per_page=40';
-//     const page = `&page=${this.page}`;
-  
-//    const object =  await axios.get(`${BASE_URL}?key=${key}&q=${this.search_query}${searchTypePhoto}${searchOrientation}${ageFilter}${perPage}${page}`);
-//    return object.data;
-//   }
+ImageGallery.propTypes = {
+     prevName: PropTypes.string  
+    }

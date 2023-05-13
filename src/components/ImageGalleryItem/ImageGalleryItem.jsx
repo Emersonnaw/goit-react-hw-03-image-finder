@@ -7,24 +7,20 @@ export class ImageGalleryItem extends Component{
         showModal: false
     }
 
-    
     toggleModal = () => {
     this.setState(({ showModal }) => ({
       showModal: !showModal,
     })); 
   };
 
-
     render() {
         const { webformatURL, tags, largeImageURL } = this.props;
         const { showModal } = this.state;
         return(
-            
             <>
                 <Li  onClick={this.toggleModal}>
                     <Img src={webformatURL} alt={tags} />
                 </Li>
-                
                 {showModal && <Modal imgUrl={largeImageURL} alt ={tags} onClose={this.toggleModal} />}
                 
             </>
