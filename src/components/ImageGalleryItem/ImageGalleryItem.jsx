@@ -3,22 +3,22 @@ import { Li, Img } from './ImageGalleryItem.styled';
 import { Modal } from '../Modal';
 import PropTypes from 'prop-types';
 export class ImageGalleryItem extends Component{
-     state = {
+    state = {
         showModal: false
     }
 
     toggleModal = () => {
     this.setState(({ showModal }) => ({
-      showModal: !showModal,
+    showModal: !showModal,
     })); 
-  };
+    };
 
     render() {
         const { webformatURL, tags, largeImageURL } = this.props;
         const { showModal } = this.state;
         return(
             <>
-                <Li  onClick={this.toggleModal}>
+                <Li onClick={this.toggleModal}>
                     <Img src={webformatURL} alt={tags} />
                 </Li>
                 {showModal && <Modal imgUrl={largeImageURL} alt ={tags} onClose={this.toggleModal} />}
@@ -29,8 +29,10 @@ export class ImageGalleryItem extends Component{
 }
 
 ImageGalleryItem.propTypes = {
-   
-    webformatURL: PropTypes.string.isRequired,
-    tags: PropTypes.string.isRequired,
-    largeImageURL: PropTypes.string.isRequired,
+    showModal: PropTypes.arrayOf(PropTypes.shape({
+        webformatURL: PropTypes.string.isRequired,
+        tags: PropTypes.string.isRequired,
+        largeImageURL:PropTypes.string.isRequired,
+        
+    }))
 };
