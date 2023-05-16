@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 import { Button } from 'components/Button';
 import { H1} from './ImageGallery/ImageGallery.styled';
 import { AppDiv } from './App.styled'
-import PropTypes from 'prop-types';
+
 
 import 'react-toastify/dist/ReactToastify.css';
 export class App extends Component  {
@@ -91,11 +91,3 @@ export class App extends Component  {
 }
 };
 
-App.propTypes = {
-  value: PropTypes.objectOf(PropTypes.string.isRequired),
-  finishRenderList: PropTypes.objectOf(PropTypes.shape({
-    hits: PropTypes.object.isRequired,
-    total: PropTypes.object.isRequired,
-    totalHits: PropTypes.object.isRequired,
-  }))
-}
